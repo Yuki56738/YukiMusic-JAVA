@@ -26,6 +26,10 @@ public class MusicBOT extends ListenerAdapter {
         if(event.getName().equals("play")){
             event.reply("頑張っています...").queue();
             String url = event.getOption("url").getAsString();
+            if(url == null || url.isEmpty()) {
+                event.getChannel().sendMessage("URLがNULLです.");
+                return;
+            };
             loadAndPlay(event, url);
         } else
         if (event.getName().equals("ping")) {
@@ -38,7 +42,7 @@ public class MusicBOT extends ListenerAdapter {
         playerManager.loadItem(url, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                player.startTrack(track, false);
+                player.playTrack(track);
                 event.getChannel().sendMessage("再生中: " + track.getInfo().title).queue();
             }
 
